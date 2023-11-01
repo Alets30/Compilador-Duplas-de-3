@@ -566,6 +566,7 @@ public class ide extends javax.swing.JFrame {
             while (ban) {
                 //Se inicia un bucle while que continuará hasta que se hayan producido todos los tokens.
                 Tokens tokens = lexer.yylex();
+                obs.originalToken = "" + lexer.lexeme;
                 //System.out.println(tokens);
                 //En cada iteración del bucle while, se llama al método yylex() del objeto Lexer para obtener el siguiente token.
                 if (tokens == null || !obs.error.equals("")) {

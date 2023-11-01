@@ -5,8 +5,9 @@ import java.util.Stack;
 public class Sintactico {
 
     private int ip, it;
+    private boolean asign = false;
     private String result;
-    public String error;
+    public String error, originalToken;
     private String tnt[] = {"id", "num", "int", "float", "char", ",", ";", "+", "-", "*", "/", "=", "(", ")", "$", "P", "Tipo", "V", "A", "EXP", "E", "TERM", "T", "F"};
     private String productions[] = {"P'>P", "P>Tipo id V", "P>A", "Tipo>int", "Tipo>float", "Tipo>char", "V>, id V", "V>; P", "A>id = EXP ;", "EXP>+ TERM E", "EXP>- TERM E", "EXP>TERM E", "E>+ TERM E", "E>- TERM E", "E>vacia", "TERM>F T", "T>* F T", "T>/ F T", "T>vacia", "F>id", "F>num", "F>( EXP )"};
     private String table[][] = {
@@ -57,6 +58,7 @@ public class Sintactico {
         {"", "", "", "", "", "", "P17", "P17", "P17", "", "", "", "", "P17", "", "", "", "", "", "", "", "", "", ""}};
     private Stack<String> stack;
     private Stack<String> auxStack;
+    private Semantico sem = new Semantico();
 
     public Sintactico() {
         stack = new Stack();
@@ -94,6 +96,20 @@ public class Sintactico {
     private void Desplazamiento(String token, String estado) {
         stack.push(token);
         stack.push(estado);
+        switch (estado) {
+            case "I4":
+                sem.type = 0;
+                break;
+            case "I5":
+                sem.type = 1;
+                break;
+            case "I6":
+                sem.type = 2;
+                break;
+            case "I8", "I21":
+                sem.AgregarSimbolo(originalToken, "");
+                break;
+        }
         AñadirResultado();
         //System.out.println(result);
     }
