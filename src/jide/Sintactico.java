@@ -5,12 +5,12 @@ import java.util.Stack;
 public class Sintactico {
 
     private int ip, it;
-    private boolean asign = false;
+    //private boolean asign = false;
     private String result;
     public String error, originalToken;
-    private String tnt[] = {"id", "num", "int", "float", "char", ",", ";", "+", "-", "*", "/", "=", "(", ")", "$", "P", "Tipo", "V", "A", "EXP", "E", "TERM", "T", "F"};
-    private String productions[] = {"P'>P", "P>Tipo id V", "P>A", "Tipo>int", "Tipo>float", "Tipo>char", "V>, id V", "V>; P", "A>id = EXP ;", "EXP>+ TERM E", "EXP>- TERM E", "EXP>TERM E", "E>+ TERM E", "E>- TERM E", "E>vacia", "TERM>F T", "T>* F T", "T>/ F T", "T>vacia", "F>id", "F>num", "F>( EXP )"};
-    private String table[][] = {
+    private final String tnt[] = {"id", "num", "int", "float", "char", ",", ";", "+", "-", "*", "/", "=", "(", ")", "$", "P", "Tipo", "V", "A", "EXP", "E", "TERM", "T", "F"};
+    private final String productions[] = {"P'>P", "P>Tipo id V", "P>A", "Tipo>int", "Tipo>float", "Tipo>char", "V>, id V", "V>; P", "A>id = EXP ;", "EXP>+ TERM E", "EXP>- TERM E", "EXP>TERM E", "E>+ TERM E", "E>- TERM E", "E>vacia", "TERM>F T", "T>* F T", "T>/ F T", "T>vacia", "F>id", "F>num", "F>( EXP )"};
+    private final String table[][] = {
         {"I7", "", "I4", "I5", "I6", "", "", "", "", "", "", "", "", "", "", "I1", "I2", "", "I3", "", "", "", "", ""},
         {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "P0", "", "", "", "", "", "", "", "", ""},
         {"I8", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
@@ -58,7 +58,7 @@ public class Sintactico {
         {"", "", "", "", "", "", "P17", "P17", "P17", "", "", "", "", "P17", "", "", "", "", "", "", "", "", "", ""}};
     private Stack<String> stack;
     private Stack<String> auxStack;
-    private Semantico sem = new Semantico();
+    private final Semantico sem = new Semantico();
 
     public Sintactico() {
         stack = new Stack();
@@ -85,7 +85,7 @@ public class Sintactico {
                     return;
                 } else if (table[Integer.parseInt(stack.peek().split("I")[1])][it].startsWith("I")) {
                     //System.out.println(token);
-                    Desplazamiento(token, table[Integer.parseInt(stack.peek().split("I")[1])][it]);
+                    Desplazamiento(token, table[Integer.parseInt(stack.peek().split("I")[1])][it], linea);
                 } else {
                     Reduccion(token, Integer.parseInt(table[Integer.parseInt(stack.peek().split("I")[1])][it].split("P")[1]), linea);
                 }
@@ -93,22 +93,27 @@ public class Sintactico {
         }
     }
 
-    private void Desplazamiento(String token, String estado) {
+    private void Desplazamiento(String token, String estado, int linea) {
         stack.push(token);
         stack.push(estado);
         switch (estado) {
-            case "I4":
+            case "I4" ->
                 sem.type = 0;
-                break;
-            case "I5":
+            case "I5" ->
                 sem.type = 1;
-                break;
-            case "I6":
+            case "I6" ->
                 sem.type = 2;
-                break;
-            case "I8", "I21":
-                sem.AgregarSimbolo(originalToken, "");
-                break;
+            case "I8", "I21" ->
+                sem.AddSymbol(originalToken, "", linea);
+            case "I18" -> {
+                sem.AddSemStack(token, originalToken, linea);
+                if (!sem.error.equals("")) {
+                    error += sem.error;
+                    return;
+                }
+            }
+            case "I19" ->
+                sem.AddSemStack(token, originalToken, linea);
         }
         AñadirResultado();
         //System.out.println(result);

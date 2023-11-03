@@ -1,4 +1,4 @@
 float y,x;
-int a;
+int z;
 char d;
-x= (5 + 8);
+x= -71;
