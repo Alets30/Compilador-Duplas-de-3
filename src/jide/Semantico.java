@@ -68,6 +68,7 @@ public class Semantico {
                     semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
                     if (semTableResult != -1) {
                         semStack.push("" + semTableResult);
+                        stackOp.push(token);
                     } else {
                         error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
                     }
@@ -75,14 +76,29 @@ public class Semantico {
                 //System.out.println(stackOp);
                 break;
             case "*", "/":
-                
+                if (semStack.peek().equals("$") || semStack.peek().equals("(")) {
+                    return;
+                }
+                if (token.equals("-") || token.equals("+") || stackOp.peek().equals("$") || stackOp.peek().equals("(")) {
+                    stackOp.push(token);
+                } else {
+                    //System.out.println(semStack + " " + token);
+                    stackOp.pop();
+                    semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
+                    if (semTableResult != -1) {
+                        semStack.push("" + semTableResult);
+                        stackOp.push(token);
+                    } else {
+                        error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
+                    }
+                }
                 break;
             case "(":
                 stackOp.push(token);
                 //System.out.println(stackOp);
                 break;
             case ")", ";":
-                while (!stackOp.peek().equals("(") && !stackOp.peek().equals("$") && !semStack.peek().equals("$")) {
+                while (!stackOp.peek().equals("$") && !semStack.peek().equals("$")) {
                     //System.out.println(stackOp);
                     stackOp.pop();
                     semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
@@ -92,8 +108,13 @@ public class Semantico {
                         error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
                         return;
                     }
+                    if (stackOp.peek().equals("(")) {
+                        stackOp.pop();
+                        break;
+                    }
                 }
-                //System.out.println(stackOp);
+                System.out.println(semStack);
+                System.out.println(stackOp);
                 break;
         }
     }

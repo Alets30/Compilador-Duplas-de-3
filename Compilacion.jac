@@ -1,4 +1,4 @@
 float y,x;
-int z;
+int z, w;
 char d;
-x=(z - d);
+x=8*(3.0-w);
