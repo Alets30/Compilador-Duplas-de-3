@@ -7,6 +7,7 @@ public class Semantico {
 
     public String error = "";
     public int type;
+    //Tabla de operaciones semánticas
     private int semTable[][] = {
         {0, 1, -1},
         {1, 1, -1},
@@ -41,16 +42,60 @@ public class Semantico {
         switch (token) {
             case "num":
                 semStack.push("" + RecognizeNumber(originalToken));
-                System.out.println(semStack);
+                //System.out.println(semStack);
                 break;
             default:
                 if (sTable.containsKey(originalToken)) {
                     semStack.push("" + sTable.get(originalToken).get("tipo"));
                 } else {
-                    error += "Error semantico en la linea " + line + " el elemento " + token + " no se ha declarado.\n";
+                    error += "Error semantico en la linea " + line + " el elemento " + originalToken + " no se ha declarado.\n";
                 }
         }
-        //System.out.println(semStack);
+    }
+
+    public void AddOpStack(String token, int line) {
+        int semTableResult = -1;
+        switch (token) {
+            case "+", "-":
+                if (semStack.peek().equals("$") || semStack.peek().equals("(")) {
+                    return;
+                }
+                if (token.equals("*") || token.equals("/") || stackOp.peek().equals("$") || stackOp.peek().equals("(")) {
+                    stackOp.push(token);
+                } else {
+                    //System.out.println(semStack + " " + token);
+                    stackOp.pop();
+                    semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
+                    if (semTableResult != -1) {
+                        semStack.push("" + semTableResult);
+                    } else {
+                        error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
+                    }
+                }
+                //System.out.println(stackOp);
+                break;
+            case "*", "/":
+                
+                break;
+            case "(":
+                stackOp.push(token);
+                //System.out.println(stackOp);
+                break;
+            case ")", ";":
+                while (!stackOp.peek().equals("(") && !stackOp.peek().equals("$") && !semStack.peek().equals("$")) {
+                    //System.out.println(stackOp);
+                    stackOp.pop();
+                    semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
+                    if (semTableResult != -1) {
+                        semStack.push("" + semTableResult);
+                    } else {
+                        error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
+                        return;
+                    }
+                }
+                //System.out.println(stackOp);
+                break;
+        }
     }
 
     private int RecognizeNumber(String number) {

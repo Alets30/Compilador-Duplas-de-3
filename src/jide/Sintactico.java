@@ -114,6 +114,8 @@ public class Sintactico {
             }
             case "I19" ->
                 sem.AddSemStack(token, originalToken, linea);
+            case "I20", "I14", "I15", "I27", "I28" ->
+                sem.AddOpStack(token, linea);
         }
         AñadirResultado();
         //System.out.println(result);
@@ -121,6 +123,15 @@ public class Sintactico {
 
     private void Reduccion(String token, int production, int line) {
         int state;
+        switch (production) {
+            case 9, 10, 11 -> {
+                sem.AddOpStack(token, line);
+                if (!sem.error.equals("")) {
+                    error += sem.error;
+                    return;
+                }
+            }
+        }
         while (!productions[production].split(">")[1].equals("vacia")) {
             //System.out.println(productions[production].split(">")[1].split(" ")[0]);
             if (stack.pop().equals(productions[production].split(">")[1].split(" ")[0])) {
