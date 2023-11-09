@@ -97,6 +97,8 @@ public class Sintactico {
         stack.push(token);
         stack.push(estado);
         switch (estado) {
+            case "I7" ->
+                sem.asign = originalToken;
             case "I4" ->
                 sem.type = 0;
             case "I5" ->
@@ -107,13 +109,16 @@ public class Sintactico {
                 sem.AddSymbol(originalToken, "", linea);
             case "I18" -> {
                 sem.AddSemStack(token, originalToken, linea);
+                //sem.AddExpPos(originalToken);
                 if (!sem.error.equals("")) {
                     error += sem.error;
                     return;
                 }
             }
-            case "I19" ->
+            case "I19" -> {
                 sem.AddSemStack(token, originalToken, linea);
+                //sem.AddExpPos(originalToken);
+            }
             case "I14", "I15", "I20", "I27", "I28", "I30", "I31" ->
                 sem.AddOpStack(token, linea);
         }
@@ -124,7 +129,8 @@ public class Sintactico {
     private void Reduccion(String token, int production, int line) {
         int state;
         switch (production) {
-            case 9, 10, 11 -> {
+            case 9, 10, 11, 16, 17 -> {
+                //System.out.println(token);
                 sem.AddOpStack(token, line);
                 if (!sem.error.equals("")) {
                     error += sem.error;
