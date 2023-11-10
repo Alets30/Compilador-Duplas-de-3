@@ -64,14 +64,17 @@ public class Semantico {
         //System.out.println(stackOp);
         switch (token) {
             case "+", "-":
-                if (semStack.peek().equals("$") || semStack.peek().equals("(")) {
+                if (semStack.peek().equals("$") && stackOp.peek().equals("(")) {
                     return;
                 }
-                if (stackOp.peek().equals("*") || stackOp.peek().equals("/") || stackOp.peek().equals("$") || stackOp.peek().equals("(")) {
+                if (stackOp.peek().equals("$") || stackOp.peek().equals("(")) {
                     stackOp.push(token);
                 } else {
-                    //System.out.println(semStack + " " + token);
-                    expPosf.push(stackOp.pop());
+                    System.out.println(stackOp);
+                    do {
+                        expPosf.push(stackOp.pop());
+                    } while (stackOp.peek().equals("-") || stackOp.peek().equals("+"));
+                    System.out.println(semTableResult);
                     semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
                     if (semTableResult != -1) {
                         semStack.push("" + semTableResult);
@@ -83,18 +86,17 @@ public class Semantico {
                 //System.out.println(stackOp);
                 break;
             case "*", "/":
-                if (semStack.peek().equals("$") || semStack.peek().equals("(")) {
-                    stackOp.push(token);
-                    return;
-                }
                 //System.out.println(stackOp.peek());
                 if (stackOp.peek().equals("-") || stackOp.peek().equals("+") || stackOp.peek().equals("$") || stackOp.peek().equals("(")) {
                     stackOp.push(token);
                 } else {
                     //System.out.println(semStack + " " + token);
-                    expPosf.push(stackOp.pop());
+                    do {
+                        expPosf.push(stackOp.pop());
+                    } while (!stackOp.peek().equals("-") && !stackOp.peek().equals("+"));
+                    System.out.println(stackOp);
+
                     semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
-                    System.out.println(semTableResult);
                     if (semTableResult != -1) {
                         semStack.push("" + semTableResult);
                         System.out.println(semStack.size());
@@ -121,8 +123,8 @@ public class Semantico {
                     semTableResult = semTable[Integer.parseInt(semStack.pop())][Integer.parseInt(semStack.pop())];
                     if (semTableResult != -1) {
                         semStack.push("" + semTableResult);
-                        
-                        System.out.println(semTableResult);
+
+                        //System.out.println(semTableResult);
                     } else {
                         error += "Error semantico en la linea " + line + " tipos de dato incompatibles.\n";
                         return;

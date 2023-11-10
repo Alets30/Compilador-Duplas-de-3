@@ -1,4 +1,4 @@
-float y,x;
-int z, w;
+int a;
+float i;
 char d;
-x=((3+5)*10)+20- 4*8;
+a= d;

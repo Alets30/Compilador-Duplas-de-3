@@ -129,9 +129,10 @@ public class Sintactico {
     private void Reduccion(String token, int production, int line) {
         int state;
         switch (production) {
-            case 9, 10, 11, 16, 17 -> {
+            case 9, 10, 11 -> {
                 //System.out.println(token);
                 sem.AddOpStack(token, line);
+                //System.out.println(token);
                 if (!sem.error.equals("")) {
                     error += sem.error;
                     return;
