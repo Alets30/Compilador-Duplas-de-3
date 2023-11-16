@@ -8,17 +8,18 @@ public class Semantico {
     public String error = "";
     public int type;
     public String asign = "";
+    public String middleCode = "";
     //Tabla de operaciones semánticas
-    private int semTable[][] = {
+    private final int semTable[][] = {
         {0, 1, -1},
         {1, 1, -1},
         {-1, -1, -1}
     };
-    private HashMap<String, HashMap> sTable = new HashMap<>();
-    private HashMap<Integer, String> datatypes = new HashMap<>();
-    private Stack<String> semStack;
-    private Stack<String> stackOp;
-    private Stack<String> expPosf;
+    private final HashMap<String, HashMap> sTable = new HashMap<>();
+    private final HashMap<Integer, String> datatypes = new HashMap<>();
+    private final Stack<String> semStack;
+    private final Stack<String> stackOp;
+    private final Stack<String> expPosf;
 
     public Semantico() {
         semStack = new Stack();
@@ -137,7 +138,8 @@ public class Semantico {
                 }
                 //System.out.println(semStack);
                 //System.out.println(stackOp);
-                System.out.println(expPosf);
+                //System.out.println(expPosf);
+                System.out.println(middleCode);
                 break;
         }
     }

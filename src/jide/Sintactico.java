@@ -97,8 +97,10 @@ public class Sintactico {
         stack.push(token);
         stack.push(estado);
         switch (estado) {
-            case "I7" ->
+            case "I7" -> {
                 sem.asign = originalToken;
+                sem.middleCode += "V1 = " + originalToken + "\n";
+            }
             case "I4" ->
                 sem.type = 0;
             case "I5" ->

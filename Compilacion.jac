@@ -1,4 +1,4 @@
-int a;
-float i;
+int y,z;
+float x;
 char d;
-a= d;
+x= (y*5)-(z+10);
