@@ -99,7 +99,7 @@ public class Sintactico {
         switch (estado) {
             case "I7" -> {
                 sem.asign = originalToken;
-                sem.middleCode += "V1 = " + originalToken + "\n";
+                //sem.middleCode += "V1 = " + originalToken + "\n";
             }
             case "I4" ->
                 sem.type = 0;

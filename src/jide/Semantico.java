@@ -20,17 +20,20 @@ public class Semantico {
     private final Stack<String> semStack;
     private final Stack<String> stackOp;
     private final Stack<String> expPosf;
+    private final Stack<String> middleCodeStack;
 
     public Semantico() {
         semStack = new Stack();
         stackOp = new Stack();
         expPosf = new Stack();
+        middleCodeStack = new Stack();
         datatypes.put(0, "int");
         datatypes.put(1, "float");
         datatypes.put(2, "char");
         semStack.push("$");
         stackOp.push("$");
         expPosf.push("$");
+        middleCodeStack.push("$");
     }
 
     public void AddSymbol(String id, String value, int line) {
@@ -136,10 +139,20 @@ public class Semantico {
                         error += "Error de tipo en la línea " + line + " tipos de dato incompatibles.";
                     }
                 }
+                if (token.equals(";")) {
+                    //System.out.println(expPosf);
+                    FlipStack();
+                    //System.out.println(expPosf);
+                    //System.out.println(middleCodeStack);
+                    GenerateMiddleCode();
+                    System.out.println(middleCode);
+                    //System.out.println(expPosf);
+                }
                 //System.out.println(semStack);
                 //System.out.println(stackOp);
-                //System.out.println(expPosf);
-                System.out.println(middleCode);
+                //
+                //System.out.println(middleCode);
+                //System.out.println(middleCodeStack);
                 break;
         }
     }
@@ -150,5 +163,30 @@ public class Semantico {
 
     private int RecognizeNumber(String number) {
         return (number.matches("^[+-]?\\d*\\.\\d+([eE][+-]?\\d+)?$")) ? 1 : 0;
+    }
+
+    private void FlipStack() {
+        while (!expPosf.peek().equals("$")) {
+            System.out.println(middleCodeStack.push(expPosf.pop()));
+        }
+    }
+
+    private void GenerateMiddleCode() {
+        String middleCodeStackItem, variableString;
+        while (!middleCodeStack.peek().equals("$")) {
+            middleCodeStackItem = middleCodeStack.pop();
+            //System.out.println(expPosf.size());
+            if ("*+-/".contains(middleCodeStackItem)) {
+                expPosf.pop();
+                expPosf.pop();
+                variableString = "V" + expPosf.size() + " = " + "V" + expPosf.size() + " " + middleCodeStackItem + " " + "V" + (expPosf.size() + 1) + "\n";
+                middleCode += variableString;
+                expPosf.push(variableString);
+            } else {
+                middleCode += "V" + expPosf.size() + " = " + middleCodeStackItem + "\n";
+                expPosf.push(middleCodeStackItem);
+            }
+        }
+        middleCode += asign + " = " + "V1";
     }
 }
