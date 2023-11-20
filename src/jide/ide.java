@@ -32,7 +32,7 @@ import jide.Sintactico;
  * @author juanp
  */
 public class ide extends javax.swing.JFrame {
-
+    
     Linea Linea;
     Directorio direc;
     HashMap<Integer, Map<String, String>> tablaSimbolos;
@@ -93,7 +93,7 @@ public class ide extends javax.swing.JFrame {
         DefaultStyledDocument doc = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                 super.insertString(offset, str, a);
-
+                
                 String text = getText(0, getLength());
                 int before = findLastNonWordChar(text, offset);
                 if (before < 0) {
@@ -102,7 +102,7 @@ public class ide extends javax.swing.JFrame {
                 int after = findFirstNonWordChar(text, offset + str.length());
                 int wordL = before;
                 int wordR = before;
-
+                
                 while (wordR <= after) {
                     if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
                         if (text.substring(wordL, wordR).matches("(\\W)*(programa|procedimiento|funcion|ent|flot|car|cad|booleano|imprimir|leer|si|entonces|sn|para|incremento|decremento|paso|verdadero|falso)")) {
@@ -115,10 +115,10 @@ public class ide extends javax.swing.JFrame {
                     wordR++;
                 }
             }
-
+            
             public void romeve(int offs, int len) throws BadLocationException {
                 super.remove(offs, len);
-
+                
                 String text = getText(0, getLength());
                 int before = findLastNonWordChar(text, offs);
                 if (before < 0) {
@@ -126,14 +126,14 @@ public class ide extends javax.swing.JFrame {
                 }
             }
         };
-
+        
         JTextPane txt = new JTextPane(doc);
         String temp = jTPCodigo.getText();
         jTPCodigo.setStyledDocument(txt.getStyledDocument());
         jTPCodigo.setText(temp);
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -604,6 +604,7 @@ public class ide extends javax.swing.JFrame {
                     //Si se ha llegado al final del archivo, se agrega el carácter "$" a la cadena resultado y se muestra en el componente jTPLexico.
                     jTPLexico.setText(resultado);
                     JTPSintactico.setText(obs.Resultado());
+                    JTPCI.setText(obs.middleCode);
                     return;
                 }
                 switch (tokens) {
@@ -755,7 +756,7 @@ public class ide extends javax.swing.JFrame {
         Linea = new Linea(jTPCodigo);
         jScrollPane1.setRowHeaderView(Linea);
     }
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -787,12 +788,12 @@ public class ide extends javax.swing.JFrame {
             }
         });
     }
-
+    
     public void clearAllComp() {
         jTPLexico.setText("");
         JTPSintactico.setText("");
         JTPError.setText("");
-
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

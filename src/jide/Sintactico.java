@@ -7,7 +7,7 @@ public class Sintactico {
     private int ip, it;
     //private boolean asign = false;
     private String result;
-    public String error, originalToken;
+    public String error, originalToken, middleCode;
     private final String tnt[] = {"id", "num", "int", "float", "char", ",", ";", "+", "-", "*", "/", "=", "(", ")", "$", "P", "Tipo", "V", "A", "EXP", "E", "TERM", "T", "F"};
     private final String productions[] = {"P'>P", "P>Tipo id V", "P>A", "Tipo>int", "Tipo>float", "Tipo>char", "V>, id V", "V>; P", "A>id = EXP ;", "EXP>+ TERM E", "EXP>- TERM E", "EXP>TERM E", "E>+ TERM E", "E>- TERM E", "E>vacia", "TERM>F T", "T>* F T", "T>/ F T", "T>vacia", "F>id", "F>num", "F>( EXP )"};
     private final String table[][] = {
@@ -138,6 +138,9 @@ public class Sintactico {
                 if (!sem.error.equals("")) {
                     error += sem.error;
                     return;
+                }
+                if (!sem.middleCode.equals("")) {
+                    middleCode = sem.middleCode;
                 }
             }
         }
