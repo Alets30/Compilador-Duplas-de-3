@@ -16,7 +16,7 @@ public class Semantico {
         {-1, -1, -1}
     };
     private final HashMap<String, HashMap> sTable = new HashMap<>();
-    private final HashMap<Integer, String> datatypes = new HashMap<>();
+    public final HashMap<Integer, String> datatypes = new HashMap<>();
     private final Stack<String> semStack;
     private final Stack<String> stackOp;
     private final Stack<String> expPosf;
@@ -43,6 +43,7 @@ public class Semantico {
         symbol.put("linea", "" + line);
         //System.out.println(id);
         sTable.put(id, symbol);
+        middleCode += " " + id + ";\n";
         //System.out.println(sTable);
     }
 

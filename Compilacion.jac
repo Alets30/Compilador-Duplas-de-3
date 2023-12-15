@@ -1,4 +1,4 @@
-int y,z;
-float x;
-char d;
-y= 10 + 5 * z - 10;
+float y, x;
+int a, b;
+char z, m;
+y = (5+8/(7+a));

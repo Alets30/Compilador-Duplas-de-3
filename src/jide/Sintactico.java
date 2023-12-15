@@ -101,12 +101,20 @@ public class Sintactico {
                 sem.asign = originalToken;
                 //sem.middleCode += "V1 = " + originalToken + "\n";
             }
-            case "I4" ->
+            case "I4" -> {
                 sem.type = 0;
-            case "I5" ->
+                sem.middleCode += "int";
+            }
+            case "I5" -> {
                 sem.type = 1;
-            case "I6" ->
+                sem.middleCode += "float";
+            }
+            case "I6" -> {
                 sem.type = 2;
+                sem.middleCode += "char";
+            }
+            case "I11" ->
+                sem.middleCode += sem.datatypes.get(sem.type);
             case "I8", "I21" ->
                 sem.AddSymbol(originalToken, "", linea);
             case "I18" -> {
